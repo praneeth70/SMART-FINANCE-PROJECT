@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Create instance with your backend base URL
-const API = axios.create({ baseURL: 'http://localhost:5000/api' });
+const API = axios.create({ baseURL: 'https://smart-finance-backend-8m54.onrender.com' });
 
 // This automatically attaches your JWT token to every request for security
 API.interceptors.request.use((req) => {
