@@ -1,23 +1,23 @@
 const { Pool } = require('pg');
 require('dotenv').config();
 
-// Initialize the Connection Pool
+// Use the single DATABASE_URL string provided by Render
+// If DATABASE_URL is missing, it falls back to your local individual variables
+const isProduction = process.env.DATABASE_URL;
+
 const pool = new Pool({
-  user: process.env.DB_USER,
-  host: process.env.DB_HOST,
-  database: process.env.DB_NAME,
-  password: process.env.DB_PASSWORD,
-  port: process.env.DB_PORT,
+  connectionString: process.env.DATABASE_URL,
+  // 🛡️ Required for Render/Cloud Postgres connections
+  ssl: isProduction ? { rejectUnauthorized: false } : false
 });
 
-// Test the connection immediately when the app starts
+// Test the connection
 pool.on('connect', () => {
   console.log('✅ Connected to the PostgreSQL database successfully!');
 });
 
 pool.on('error', (err) => {
   console.error('❌ Unexpected error on idle database client', err);
-  process.exit(-1);
 });
 
 module.exports = {
